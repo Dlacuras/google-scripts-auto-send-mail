@@ -1,0 +1,17 @@
+function AutoSendEmail() {
+  
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  ss.setActiveSheet(ss.getSheetByName('check-domain'));  //tên trang tính
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var dataRange = sheet.getRange('G2:K2');               //miền nhập liệu
+  var data = dataRange.getValues();
+  for (i in data) { var rowData = data[i];               //lập lại với từng hàng trong miền nhập liệu
+                    var emailAddress = rowData[0];       //vị trí địa chỉ email (ô thứ nhất của tất cả các hàng)
+                    var recipient = rowData[1];          //vị trí tên người nhận (ô thứ hai của tất cả các hàng)
+                    var message1 = rowData[2];           //nội dung 1 của email (ô thứ ba)
+                    var parameter = rowData[3];          //nội dung biến số, trả về do thuật toán trên sheet (ô thứ tư)
+                    var message2 = rowData[4];           //nội dung 2 của email
+                    var message = 'Dear ' + recipient + '!' + ' ' + message1 + ' ' + ' ' + parameter + ' ' + message2; //ghép chuỗi, giá trị các ô đã khai báo thành nội dung tin nhắn
+                    var subject = 'Auto sendmail';       //phần tiêu đề của email
+      if (parameter == 0) return;                        //nếu giá trị tính toán trả về bằng 0 thì kết thúc
+      else          MailApp.sendEmail(emailAddress, subject, message);} }   //nếu giá trị tính toán trả về khác 0 thì gửi mail tới danh sách email với tiêu đề và nội dung email đã khai báo
